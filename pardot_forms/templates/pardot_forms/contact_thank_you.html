@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% block alt_title %}
+<title>Thank you for reaching out</title>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 content">
+                <section id="contact" class="pardot-form">
+                    <h1>
+                        <span>Thank you for reaching out!</span>
+                    </h1>
+                    <p class="lead">We’ve received your message and appreciate you taking the time to contact us. Our team will review your inquiry and get back to you as soon as possible.
+                        In the meantime, feel free to explore our website for more information about Wisconsin’s energy codes, resources, and updates.
+                        We look forward to connecting with you soon!</p>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}

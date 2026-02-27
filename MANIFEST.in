@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+recursive-include pardot_forms/templates *
+recursive-include pardot_forms/static *
+recursive-include pardot_forms/migrations *.py

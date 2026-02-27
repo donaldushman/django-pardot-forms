@@ -1,0 +1,43 @@
+<section id="subscribe" class="pardot-form-modal">
+    <p>Sign up to receive updates on training and resources.</p>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in full_form %}
+            {% if field.name != 'pardot_extra_field' %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field.as_widget }}
+                    {% if field.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                {# Honeypot field - hidden #}
+                {{ field.as_hidden }}
+            {% endif %}
+        {% endfor %}
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-wireci-success text-uppercase my-3 p-3">Subscribe</button>
+        </div>
+    </form>
+    <div class="small text-secondary-emphasis" id="tandc">
+        <p class="h5">Newsletter Terms and Conditions</p>
+        <p>
+            By subscribing to our newsletter, you agree to receive emails from us, including updates, promotions, and other relevant content. You can unsubscribe at any time by clicking the "Unsubscribe" link in any of our emails.
+            <span id="tandcCollapse" class="collapse">
+                We respect your privacy and will not share, sell, or distribute your email address to third parties without your consent. Your personal information will be handled in accordance with our <a href="/privacy-policy">Privacy Policy</a>. We strive to send relevant and valuable content, and while the frequency of emails may vary, we ensure it will not be excessive. While we make every effort to provide accurate information, we do not guarantee the completeness or reliability of content in our newsletters and are not responsible for any actions taken based on the information provided. We reserve the right to update these terms at any time, and continued subscription after changes implies acceptance of the updated terms. By subscribing, you acknowledge that you have read, understood, and agreed to these terms. If you have any questions, please contact us at <a href="mailto:info@wienergycodes.org">info@wienergycodes.org</a>.
+            </span>
+            <a href="#tandcCollapse" 
+               id="tandcToggle"
+               data-bs-toggle="collapse" 
+               role="button" 
+               aria-expanded="false" 
+               aria-controls="tandcCollapse"
+               class="text-decoration-none">
+                Show more
+            </a>
+        </p>
+    </div>
+</section>

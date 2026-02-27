@@ -1,0 +1,241 @@
+# Django Pardot Forms
+
+Django app providing contact and subscription forms with Pardot integration and Bootstrap modal support.
+
+Based on the WI-RECI project implementation.
+
+## Features
+
+- ✅ Contact form with Pardot integration
+- ✅ Two-step subscription flow (email → full form with session)
+- ✅ AJAX modal support for seamless UX
+- ✅ Progressive enhancement (works without JavaScript)
+- ✅ Database submission tracking with automatic 30-day cleanup
+- ✅ Email notifications to staff
+- ✅ Cloudflare Turnstile spam protection
+- ✅ Honeypot field for additional spam filtering
+- ✅ Accessibility compliant (ARIA labels, keyboard navigation)
+- ✅ Read-only admin interface
+
+## Installation
+
+```bash
+pip install git+https://github.com/yourorg/django-pardot-forms.git
+```
+
+## Quick Start
+
+### 1. Add to INSTALLED_APPS
+
+```python
+INSTALLED_APPS = [
+    ...
+    'turnstile',  # Required for Turnstile captcha
+    'pardot_forms',
+]
+```
+
+### 2. Configure Settings
+
+**Required settings:**
+
+```python
+# Pardot form handler URLs
+PARDOT_CONTACT_FORM_URL = 'https://go.pardot.com/l/123456/contact-handler'
+PARDOT_OPT_IN_FORM_URL = 'https://go.pardot.com/l/123456/opt-in-handler'
+
+# Cloudflare Turnstile keys
+TURNSTILE_SITE_KEY = 'your-turnstile-site-key'
+TURNSTILE_SECRET_KEY = 'your-turnstile-secret-key'
+```
+
+**Optional settings:**
+
+```python
+# Email notification recipients (receives contact form submissions)
+PARDOT_CONTACT_EMAIL_RECIPIENTS = ['admin@example.com', 'support@example.com']
+
+# Email from address
+DEFAULT_FROM_EMAIL = 'noreply@example.com'
+```
+
+### 3. Include URLs
+
+```python
+from django.urls import path, include
+
+urlpatterns = [
+    ...
+    path('', include('pardot_forms.urls')),
+]
+```
+
+Available URLs:
+- `/opt-in/` - Email subscription form (step 1)
+- `/subscribe/` - Full subscription form (step 2)
+- `/contact/` - Contact form
+- `/contact-thank-you/` - Thank you page after contact submission
+- `/subscribe-thank-you/` - Thank you page after subscription
+
+### 4. Add Context Processor (Optional)
+
+For a footer email form available site-wide:
+
+```python
+TEMPLATES = [
+    {
+        'OPTIONS': {
+            'context_processors': [
+                ...
+                'pardot_forms.context_processors.footer_email_form',
+            ],
+        },
+    },
+]
+```
+
+Then in your footer template:
+
+```html
+<form id="footerEmailForm" method="post" action="{% url 'pardot_forms:email_form' %}">
+    {% csrf_token %}
+    {{ display_email_form }}
+    <button type="submit">Subscribe</button>
+</form>
+```
+
+### 5. Run Migrations
+
+```bash
+python manage.py migrate pardot_forms
+```
+
+### 6. Include Static Files
+
+In your base template, include the JavaScript for AJAX modal functionality:
+
+```html
+<!-- Load Bootstrap first (required) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Load pardot forms modal handler -->
+<script src="{% static 'pardot_forms/js/forms-modals.js' %}"></script>
+```
+
+Optional CSS for form styling:
+
+```html
+<link rel="stylesheet" href="{% static 'pardot_forms/css/forms.css' %}">
+```
+
+## Usage
+
+### Contact Modal
+
+Add a contact modal to your page:
+
+```html
+<!-- Button to trigger modal -->
+<button type="button" data-bs-toggle="modal" data-bs-target="#contactModal">
+    Contact Us
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contactModalLabel">Contact Us</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="contactFormContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+### Subscribe Modal (Two-Step Flow)
+
+```html
+<!-- Subscribe Modal -->
+<div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="subscribeModalLabel">Subscribe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="subscribeFormContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+### Standalone Forms
+
+Link directly to the form pages:
+
+```html
+<a href="{% url 'pardot_forms:contact_form' %}">Contact Us</a>
+<a href="{% url 'pardot_forms:email_form' %}">Subscribe</a>
+```
+
+## Management Commands
+
+### Delete Old Submissions
+
+Automatically clean up submissions older than 30 days:
+
+```bash
+# Dry run to see what would be deleted
+python manage.py delete_old_submissions --dry-run
+
+# Delete submissions older than 30 days (default)
+python manage.py delete_old_submissions
+
+# Delete submissions older than 90 days
+python manage.py delete_old_submissions --days=90
+```
+
+Consider adding this to a cron job or scheduled task for automatic cleanup.
+
+## Admin Interface
+
+View submitted forms in Django admin at `/admin/pardot_forms/contactsubmission/`
+
+The admin interface is read-only to preserve submission integrity. You can:
+- View all submissions
+- Search by name, email, or company
+- Filter by date, Pardot status, or email status
+- Export data using Django admin actions
+
+## Development
+
+### Testing
+
+```bash
+python -m pytest
+```
+
+### Code Quality
+
+```bash
+# Format code
+black .
+
+# Lint
+flake8 .
+```
+
+## License
+
+MIT License - see LICENSE file for details
+
+
+
+
+

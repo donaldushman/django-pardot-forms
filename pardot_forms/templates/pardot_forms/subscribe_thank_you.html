@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% block alt_title %}
+<title>Thank you for subscribing</title>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 content">
+                <section id="contact" class="pardot-form">
+                    <h1>
+                        <span>Thank you for subscribing!</span>
+                    </h1>
+                    <p class="lead">Thank you for subscribing to our newsletter! In just a moment, you’ll receive an email from us with a link to confirm your subscription. By confirming your email, you will be the first to receive updates on the latest news and upcoming events. If you do not receive the confirmation email, please check your spam folder or <a href="/contact">contact us</a> for assistance. Thank you for choosing to be a part of Wisconsin Energy Codes!</p>
+
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}

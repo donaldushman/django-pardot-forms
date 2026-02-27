@@ -1,0 +1,91 @@
+/* Django Pardot Forms Styling */
+
+.pardot-contact-form,
+.pardot-email-form,
+.pardot-full-form {
+    max-width: 100%;
+}
+
+.pardot-contact-form .form-control,
+.pardot-email-form .form-control,
+.pardot-full-form .form-control {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.pardot-contact-form .form-control:focus,
+.pardot-email-form .form-control:focus,
+.pardot-full-form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: 0;
+}
+
+.pardot-contact-form textarea.form-control,
+.pardot-email-form textarea.form-control,
+.pardot-full-form textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.pardot-contact-form .form-label,
+.pardot-email-form .form-label,
+.pardot-full-form .form-label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.pardot-contact-form .btn-primary,
+.pardot-email-form .btn-primary,
+.pardot-full-form .btn-primary {
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.pardot-contact-form .text-danger,
+.pardot-email-form .text-danger,
+.pardot-full-form .text-danger {
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* Modal specific styles */
+.modal .pardot-contact-form,
+.modal .pardot-email-form,
+.modal .pardot-full-form {
+    padding: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .pardot-contact-form,
+    .pardot-email-form,
+    .pardot-full-form {
+        padding: 15px;
+    }
+    
+    .pardot-contact-form .btn-primary,
+    .pardot-email-form .btn-primary,
+    .pardot-full-form .btn-primary {
+        width: 100%;
+    }
+}
+
+/* Footer form styling */
+.footer-subscribe-form {
+    max-width: 400px;
+}
+
+.footer-subscribe-form .form-control {
+    border-radius: 20px;
+    padding: 10px 20px;
+}
+
+.footer-subscribe-form .btn-primary {
+    border-radius: 20px;
+    padding: 10px 20px;
+}
