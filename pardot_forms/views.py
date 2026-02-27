@@ -24,7 +24,7 @@ def email_form_view(request):
             
             if is_ajax:
                 return JsonResponse({'success': True})
-            return redirect("full_form")
+            return redirect("pardot_forms:full_form")
     else:
         email_form = PardotOptInEmailForm()
     return render(request, "pardot_forms/email_form.html", {"email_form": email_form})
@@ -51,7 +51,7 @@ def full_form_view(request):
                         'success': True,
                         'message': 'Thank you for subscribing! We will keep you updated on training and resources.'
                     })
-                return redirect('subscribe_thank_you')
+                return redirect('pardot_forms:subscribe_thank_you')
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error sending to Pardot: {e}")
                 if is_ajax:
@@ -61,7 +61,7 @@ def full_form_view(request):
                         'html': render(request, template, 
                                      {"full_form": full_form}).content.decode('utf-8')
                     })
-                return redirect('contact_form')
+                return redirect('pardot_forms:contact_form')
         else:
             # Form has errors
             if is_ajax:
@@ -147,7 +147,7 @@ def contact_form_view(request):
                     'success': True,
                     'message': 'Thank you for contacting us! We will get back to you soon.'
                 })
-            return redirect('contact_thank_you')
+            return redirect('pardot_forms:contact_thank_you')
         else:
             # Form has errors
             if is_ajax:

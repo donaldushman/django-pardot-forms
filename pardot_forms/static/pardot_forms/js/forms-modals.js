@@ -1,4 +1,12 @@
 // Contact form AJAX handler
+// URLs should be configured via window.PARDOT_FORMS_URLS
+// Include pardot_forms/includes/forms_urls.html in your template
+if (!window.PARDOT_FORMS_URLS) {
+    console.error('PARDOT_FORMS_URLS not configured. Include pardot_forms/includes/forms_urls.html in your template.');
+}
+
+const URLS = window.PARDOT_FORMS_URLS || {};
+
 (() => {
   const contactModal = document.getElementById('contactModal');
   if (!contactModal) return;
@@ -18,7 +26,7 @@
       </div>
     `;
 
-    fetch('/contact/', {
+    fetch(URLS.contact, {
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }
@@ -73,7 +81,7 @@
 
       const formData = new FormData(form);
 
-      fetch('/contact/', {
+      fetch(URLS.contact, {
         method: 'POST',
         body: formData,
         headers: {
@@ -174,7 +182,7 @@
 
     const formData = new FormData(footerForm);
 
-    fetch('/opt-in/', {
+    fetch(URLS.optIn, {
       method: 'POST',
       body: formData,
       headers: {
@@ -215,7 +223,7 @@
       </div>
     `;
 
-    fetch('/subscribe/', {
+    fetch(URLS.subscribe, {
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }
@@ -281,7 +289,7 @@
 
       const formData = new FormData(form);
 
-      fetch('/subscribe/', {
+      fetch(URLS.subscribe, {
         method: 'POST',
         body: formData,
         headers: {

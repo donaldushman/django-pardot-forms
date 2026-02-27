@@ -1,0 +1,13 @@
+{% comment %}
+Include this template in your base template to configure pardot_forms URLs for JavaScript.
+Usage: {% include 'pardot_forms/includes/forms_urls.html' %}
+{% endcomment %}
+<script>
+window.PARDOT_FORMS_URLS = {
+    optIn: "{% url 'pardot_forms:email_form' %}",
+    subscribe: "{% url 'pardot_forms:full_form' %}",
+    contact: "{% url 'pardot_forms:contact_form' %}",
+    contactThankYou: "{% url 'pardot_forms:contact_thank_you' %}",
+    subscribeThankYou: "{% url 'pardot_forms:subscribe_thank_you' %}"
+};
+</script>
