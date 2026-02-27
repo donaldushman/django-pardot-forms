@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Contact Form</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4">Contact Us</h2>
+                        
+                        <form method="post" id="customContactForm">
+                            {% csrf_token %}
+                            
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">Name *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Email *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.company.id_for_label }}" class="form-label">Company *</label>
+                                {{ form.company }}
+                                {% if form.company.errors %}
+                                    <div class="text-danger small">{{ form.company.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">Phone</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="text-danger small">{{ form.phone.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.comments.id_for_label }}" class="form-label">Message</label>
+                                {{ form.comments }}
+                                {% if form.comments.errors %}
+                                    <div class="text-danger small">{{ form.comments.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Turnstile CAPTCHA -->
+                            <div class="mb-3">
+                                {{ form.cf_turnstile_response }}
+                                {% if form.cf_turnstile_response.errors %}
+                                    <div class="text-danger small">{{ form.cf_turnstile_response.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Honeypot field (hidden) -->
+                            <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                                {{ form.pardot_extra_field }}
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Optional: AJAX form submission -->
+    <script>
+        document.getElementById('customContactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const formData = new FormData(form);
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            
+            fetch(form.action || window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    form.innerHTML = '<div class="alert alert-success">' + data.message + '</div>';
+                } else {
+                    // Display errors
+                    alert('Please correct the errors in the form.');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Send Message';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Message';
+            });
+        });
+    </script>
+</body>
+</html>

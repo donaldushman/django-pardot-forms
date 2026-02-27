@@ -1,10 +1,9 @@
 <section id="subscribe" class="pardot-form-modal">
-    <p>Sign up to receive updates on training and resources.</p>
     <form method="post">
         {% csrf_token %}
         {% for field in full_form %}
             {% if field.name != 'pardot_extra_field' %}
-                <div class="mb-3">
+                <div class="mb-1">
                     <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                     {{ field.as_widget }}
                     {% if field.errors %}
