@@ -20,7 +20,7 @@ Based on the WI-RECI project implementation.
 ## Installation
 
 ```bash
-pip install git+https://github.com/yourorg/django-pardot-forms.git
+pip install git+https://github.com/donaldushman/django-pardot-forms.git
 ```
 
 ## Quick Start
