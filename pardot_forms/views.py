@@ -10,6 +10,38 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+def get_pardot_settings(request):
+    """
+    Get Pardot form settings from Wagtail settings if available, 
+    otherwise fall back to Django settings.
+    
+    Returns a dictionary with:
+    - opt_in_form_url: URL for subscription form
+    - contact_form_url: URL for contact form
+    - email_recipients: List of email addresses for notifications
+    - from_email: Email address to use as sender
+    """
+    # Try to load Wagtail settings first
+    try:
+        from .wagtail_hooks import PardotFormsSettings
+        wagtail_settings = PardotFormsSettings.for_request(request)
+        
+        return {
+            'opt_in_form_url': wagtail_settings.pardot_opt_in_form_url or getattr(settings, 'PARDOT_OPT_IN_FORM_URL', ''),
+            'contact_form_url': wagtail_settings.pardot_contact_form_url or getattr(settings, 'PARDOT_CONTACT_FORM_URL', ''),
+            'email_recipients': wagtail_settings.get_email_recipients_list() or getattr(settings, 'PARDOT_CONTACT_EMAIL_RECIPIENTS', []),
+            'from_email': wagtail_settings.notification_from_email or getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@example.com'),
+        }
+    except (ImportError, AttributeError):
+        # Wagtail not installed or settings not configured, use Django settings
+        return {
+            'opt_in_form_url': getattr(settings, 'PARDOT_OPT_IN_FORM_URL', ''),
+            'contact_form_url': getattr(settings, 'PARDOT_CONTACT_FORM_URL', ''),
+            'email_recipients': getattr(settings, 'PARDOT_CONTACT_EMAIL_RECIPIENTS', []),
+            'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@example.com'),
+        }
+
 def email_form_view(request):
     """
     Renders short subscription form. Supports both regular and AJAX requests.
@@ -40,7 +72,8 @@ def full_form_view(request):
     if request.method == "POST":
         full_form = PardotOptInFullForm(request.POST)
         if full_form.is_valid():
-            pardot_url = settings.PARDOT_OPT_IN_FORM_URL
+            pardot_settings = get_pardot_settings(request)
+            pardot_url = pardot_settings['opt_in_form_url']
             data = full_form.cleaned_data
             try:
                 response = requests.post(pardot_url, data=data)
@@ -88,7 +121,8 @@ def contact_form_view(request):
     if request.method == "POST":
         contact_form = PardotContactForm(request.POST)
         if contact_form.is_valid():
-            pardot_url = settings.PARDOT_CONTACT_FORM_URL
+            pardot_settings = get_pardot_settings(request)
+            pardot_url = pardot_settings['contact_form_url']
             cleaned_data = contact_form.cleaned_data
             
             # Save submission to database (will be auto-deleted after 30 days)
@@ -124,11 +158,11 @@ def contact_form_view(request):
                 return render(request, "pardot_forms/contact_form.html", {"contact_form": contact_form})
             
             # Send email notification
-            email_recipients = getattr(settings, 'PARDOT_CONTACT_EMAIL_RECIPIENTS', [])
+            email_recipients = pardot_settings['email_recipients']
             if email_recipients:
                 subject = f"New contact form submission from {cleaned_data['first_name']} {cleaned_data['last_name']}"
                 message = f"Name: {cleaned_data['first_name']} {cleaned_data['last_name']}\nEmail: {cleaned_data['email']}\nCompany: {cleaned_data['company']}\nComments: {cleaned_data['comments']}"
-                from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@example.com')
+                from_email = pardot_settings['from_email']
                 
                 # Attempt to send email
                 email_success = False

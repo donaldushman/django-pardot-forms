@@ -29,16 +29,24 @@ setup(
         "Framework :: Django :: 4.1",
         "Framework :: Django :: 4.2",
         "Framework :: Django :: 5.0",
+        "Framework :: Wagtail",
+        "Framework :: Wagtail :: 5",
+        "Framework :: Wagtail :: 6",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
-    keywords="django pardot forms contact subscription turnstile cloudflare",
+    keywords="django pardot forms contact subscription turnstile cloudflare wagtail",
     python_requires=">=3.8",
     install_requires=[
         "Django>=4.0",
         "requests>=2.25.0",
         "django-turnstile>=0.1.0",
     ],
+    extras_require={
+        "wagtail": [
+            "wagtail>=5.0",
+        ],
+    },
     include_package_data=True,
     zip_safe=False,
 )

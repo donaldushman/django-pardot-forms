@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Wagtail CMS integration for managing Pardot form settings through admin interface
+- `PardotFormsSettings` model for site-specific configuration
+- Wagtail admin panel for configuring form URLs and email recipients
+- Support for multisite Wagtail installations with per-site settings
+- Automatic fallback from Wagtail settings to Django settings
+- `get_pardot_settings()` helper function for settings resolution
+- Comprehensive Wagtail integration documentation
+- Examples directory with custom form implementations
+- Advanced customization examples (forms, views, models, templates)
+
+### Changed
+- Views now check Wagtail settings first, then fall back to Django settings
+- Updated README with Wagtail installation and configuration instructions
+- Enhanced setup.py with optional Wagtail dependency
+
 ## [0.1.0] - 2026-02-27
 
 ### Added

@@ -20,7 +20,11 @@ Based on the WI-RECI project implementation.
 ## Installation
 
 ```bash
+# Standard installation
 pip install git+https://github.com/donaldushman/django-pardot-forms.git
+
+# With Wagtail support
+pip install git+https://github.com/donaldushman/django-pardot-forms.git[wagtail]
 ```
 
 ## Quick Start
@@ -133,6 +137,81 @@ Optional CSS for form styling:
 
 ```html
 <link rel="stylesheet" href="{% static 'pardot_forms/css/forms.css' %}">
+```
+
+## Wagtail Integration
+
+If you're using Wagtail CMS, you can manage Pardot form settings through the Wagtail admin interface instead of hardcoding them in your Django settings.
+
+**📖 See the [Wagtail Integration Guide](docs/WAGTAIL.md) for complete documentation**  
+**⚡ Quick start: [Wagtail Quick Reference](docs/WAGTAIL_QUICK_START.md)**
+
+### Setup
+
+1. **Ensure wagtail.contrib.settings is installed:**
+
+```python
+INSTALLED_APPS = [
+    ...
+    'wagtail.contrib.settings',  # Required for site settings
+    'turnstile',
+    'pardot_forms',
+]
+```
+
+2. **Add the context processor:**
+
+```python
+TEMPLATES = [
+    {
+        'OPTIONS': {
+            'context_processors': [
+                ...
+                'wagtail.contrib.settings.context_processors.settings',
+            ],
+        },
+    },
+]
+```
+
+3. **Run migrations:**
+
+```bash
+python manage.py migrate pardot_forms
+```
+
+### Configure in Wagtail Admin
+
+Navigate to **Settings > Pardot Forms** in the Wagtail admin and configure:
+
+- **Subscription Form URL** - Your Pardot opt-in form handler URL
+- **Contact Form URL** - Your Pardot contact form handler URL
+- **Contact Form Email Recipients** - Email addresses to receive notifications (one per line)
+- **Notification From Email** - Optional sender email address
+
+### How It Works
+
+The app automatically detects if Wagtail is available:
+- **With Wagtail:** Settings from the Wagtail admin take priority, with Django settings as fallback
+- **Without Wagtail:** Uses Django settings exclusively
+
+This means you can:
+- Configure settings per-site in multisite Wagtail installations
+- Update URLs without redeploying code
+- Allow non-technical staff to manage form configuration
+- Still use Django settings as defaults or fallbacks
+
+### Example
+
+```python
+# Django settings (fallback values)
+PARDOT_CONTACT_FORM_URL = 'https://go.pardot.com/l/123456/contact-default'
+
+# Wagtail admin settings (takes priority when set)
+# Navigate to Settings > Pardot Forms and set:
+# Contact Form URL: https://go.pardot.com/l/789012/contact-custom
+
+# The app will use the Wagtail setting if available, otherwise the Django setting
 ```
 
 ## Usage
