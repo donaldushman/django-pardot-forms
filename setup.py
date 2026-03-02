@@ -16,8 +16,10 @@ setup(
     packages=find_packages(),
     package_data={
         'pardot_forms': [
-            'templates/**/*.html',
-            'static/**/*',
+            'templates/pardot_forms/*.html',
+            'templates/pardot_forms/includes/*.html',
+            'static/pardot_forms/css/*.css',
+            'static/pardot_forms/js/*.js',
             'migrations/*.py',
         ],
     },
