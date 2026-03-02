@@ -3,6 +3,12 @@
 {% block alt_title %}
 <title>Subscribe</title>
 {% endblock %}
+{% block extra_css %}
+{{ full_form.media.css }}
+{% endblock %}
+{% block extra_js %}
+{{ full_form.media.js }}
+{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">

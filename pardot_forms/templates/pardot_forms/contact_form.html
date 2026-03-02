@@ -3,6 +3,9 @@
 {% block alt_title %}
 <title>Contact</title>
 {% endblock %}
+{% block extra_css %}
+{{ contact_form.media.css }}
+{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -28,6 +31,7 @@
 </div>
 {% endblock %}
 {% block extra_js %}
+{{ contact_form.media.js }}
 <script>
     const checkbox = document.getElementById('id_opt_in');
     const tandc = document.getElementById('tandc');
