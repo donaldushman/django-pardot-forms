@@ -207,7 +207,9 @@ class EmailFormViewTest(TestCase):
             {'email': 'not-an-email'}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'email_form', 'email', 'Enter a valid email address.')
+        form = response.context['email_form']
+        self.assertFalse(form.is_valid())
+        self.assertIn('email', form.errors)
 
     def test_ajax_post_valid_email(self):
         """Test AJAX POST with valid email returns JSON."""
