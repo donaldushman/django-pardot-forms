@@ -27,6 +27,20 @@ pip install git+https://github.com/donaldushman/django-pardot-forms.git
 pip install git+https://github.com/donaldushman/django-pardot-forms.git[wagtail]
 ```
 
+## Updating
+
+To update to the latest version, use `--force-reinstall` and `--no-cache-dir` to ensure pip pulls fresh changes:
+
+```bash
+# Standard update
+pip install --force-reinstall --no-cache-dir git+https://github.com/donaldushman/django-pardot-forms.git
+
+# With Wagtail support
+pip install --force-reinstall --no-cache-dir git+https://github.com/donaldushman/django-pardot-forms.git[wagtail]
+```
+
+> **Note:** Using `pip install --upgrade` alone may not fetch the latest changes due to pip's caching of git repositories.
+
 ## Quick Start
 
 ### 1. Add to INSTALLED_APPS

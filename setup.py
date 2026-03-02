@@ -14,6 +14,13 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/donaldushman/django-pardot-forms",
     packages=find_packages(),
+    package_data={
+        'pardot_forms': [
+            'templates/**/*.html',
+            'static/**/*',
+            'migrations/*.py',
+        ],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
