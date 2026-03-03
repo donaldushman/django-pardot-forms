@@ -1,5 +1,5 @@
 <section id="subscribe" class="pardot-form-modal">
-    <form method="post">
+    <form method="post" action="{% url 'pardot_forms:full_form' %}">
         {% csrf_token %}
         {% for field in full_form %}
             {% if field.name != 'pardot_extra_field' %}

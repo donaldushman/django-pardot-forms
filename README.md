@@ -130,22 +130,17 @@ python manage.py migrate pardot_forms
 
 ### 6. Include Static Files
 
-In your base template, include the URL configuration and JavaScript for AJAX modal functionality:
+In your base template, include the pardot forms JavaScript:
 
 ```html
 {% load static %}
 
-<!-- Configure pardot_forms URLs for JavaScript (required for AJAX modals) -->
-{% include 'pardot_forms/includes/forms_urls.html' %}
-
 <!-- Load Bootstrap first (required) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Load pardot forms modal handler -->
+<!-- Load pardot forms JavaScript -->
 <script src="{% static 'pardot_forms/js/forms-modals.js' %}"></script>
 ```
-
-**Important:** The `forms_urls.html` include must come before the `forms-modals.js` script. This configures the URLs using Django's URL resolver, ensuring the JavaScript works regardless of where you mount the app.
 
 Optional CSS for form styling:
 
