@@ -50,6 +50,10 @@ def email_form_view(request):
         if email_form.is_valid():
             email = email_form.cleaned_data["email"]
             request.session["email"] = email
+            referer = request.META.get('HTTP_REFERER')
+            if referer:
+                separator = '&' if '?' in referer else '?'
+                return redirect(f"{referer}{separator}subscribe=1")
             return redirect("pardot_forms:full_form")
     else:
         email_form = PardotOptInEmailForm()
