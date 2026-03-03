@@ -1,7 +1,9 @@
 {% comment %}
-Include this template in your base template to configure pardot_forms URLs for JavaScript.
+Include this template in your base template to configure pardot_forms URLs for JavaScript
+and to load the Cloudflare Turnstile script.
 Usage: {% include 'pardot_forms/includes/forms_urls.html' %}
 {% endcomment %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
 window.PARDOT_FORMS_URLS = {
     optIn: "{% url 'pardot_forms:email_form' %}",

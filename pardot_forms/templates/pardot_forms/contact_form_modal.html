@@ -1,5 +1,4 @@
 <section id="contact" class="pardot-form-modal">
-    {{ contact_form.media }}
     <form method="post">
         {% csrf_token %}
         {% for field in contact_form %}
